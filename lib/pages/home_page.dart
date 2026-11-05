@@ -3,6 +3,7 @@ import '../core/theme.dart';
 import '../core/widgets/maintenance_card.dart';
 import '../service/api_service.dart';
 import 'login_page.dart';
+import 'form_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,12 +61,12 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _showComingSoon(String action) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Fitur $action akan tersedia pada pembaruan berikutnya.'),
-      ),
+  Future<void> _openForm({Map<String, dynamic>? item}) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => FormPage(item: item)),
     );
+    if (result == true) _fetchData();
   }
 
   @override
@@ -113,14 +114,14 @@ class _HomePageState extends State<HomePage> {
                         serviceType: item['service_type'] ?? '-',
                         status: item['status'] ?? 'scheduled',
                         cost: item['cost']?.toString() ?? '0',
-                        onTap: () => _showComingSoon('edit'),
+                        onTap: () => _openForm(item: item),
                       ),
                     );
                   },
                 ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.ink,
-        onPressed: () => _showComingSoon('tambah'),
+        onPressed: () => _openForm(),
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
