@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme.dart';
-import 'pages/home_placeholder.dart';
+import 'pages/home_page.dart';
 import 'pages/login_page.dart';
 import 'service/api_service.dart';
 
@@ -48,9 +48,7 @@ class _AuthGateState extends State<AuthGate> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        return snapshot.data != null
-            ? const HomePlaceholder()
-            : const LoginPage();
+        return snapshot.data != null ? const HomePage() : const LoginPage();
       },
     );
   }

@@ -3,7 +3,7 @@ import '../core/theme.dart';
 import '../core/widgets/app_button.dart';
 import '../core/widgets/app_text_field.dart';
 import '../service/api_service.dart';
-import 'home_placeholder.dart';
+import 'home_page.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomePlaceholder()),
+        MaterialPageRoute(builder: (_) => const HomePage()),
       );
     } catch (e) {
       if (!mounted) return;
