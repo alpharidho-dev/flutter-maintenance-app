@@ -9,6 +9,8 @@ import '../core/widgets/app_button.dart';
 import '../core/widgets/app_text_field.dart';
 import '../service/api_service.dart';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 class FormPage extends StatefulWidget {
   final Map<String, dynamic>? item;
   const FormPage({super.key, this.item});
@@ -26,7 +28,7 @@ class _FormPageState extends State<FormPage> {
   late TextEditingController _nextDateController;
 
   String _status = 'scheduled';
-  File? _imageFile;
+  XFile? _imageFile;
   bool _loading = false;
 
   bool get _isEdit => widget.item != null;
@@ -53,7 +55,7 @@ class _FormPageState extends State<FormPage> {
 
   Future<void> _pickImage() async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (picked != null) setState(() => _imageFile = File(picked.path));
+    if (picked != null) setState(() => _imageFile = picked);
   }
 
   Future<void> _pickDate(TextEditingController controller) async {
@@ -199,7 +201,12 @@ class _FormPageState extends State<FormPage> {
                     child: _imageFile != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(AppTheme.rbS),
-                            child: Image.file(_imageFile!, fit: BoxFit.cover),
+                            child: kIsWeb
+                                ? Image.network(
+                                    _imageFile!.path,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.file(File(_imageFile!.path), fit: BoxFit.cover),
                           )
                         : const Center(
                             child: Column(

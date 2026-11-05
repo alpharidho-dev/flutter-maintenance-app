@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ApiService {
-  // Ganti pake IP hp kalo ga deploy be atau tuneling benya misal http://192.168.1.10:8000/api/v1
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
+  static const String baseUrl = 'http://localhost:8000/api/v1';
   static const String _tokenKey = 'token';
 
   static Future<void> saveToken(String token) async {
@@ -69,7 +68,7 @@ class ApiService {
   static Future<dynamic> postMultipart(
     String endpoint,
     Map<String, String> fields,
-    File? image,
+    XFile? image, 
   ) async {
     final token = await getToken();
     final request = http.MultipartRequest(
@@ -82,8 +81,13 @@ class ApiService {
     request.fields.addAll(fields);
 
     if (image != null) {
+      final bytes = await image.readAsBytes();
       request.files.add(
-        await http.MultipartFile.fromPath('image', image.path),
+        http.MultipartFile.fromBytes(
+          'image',
+          bytes,
+          filename: image.name,
+        ),
       );
     }
 
@@ -95,7 +99,7 @@ class ApiService {
   static Future<dynamic> putMultipart(
     String endpoint,
     Map<String, String> fields,
-    File? image,
+    XFile? image, 
   ) async {
     final token = await getToken();
     final request = http.MultipartRequest(
@@ -108,8 +112,13 @@ class ApiService {
     request.fields.addAll(fields);
 
     if (image != null) {
+      final bytes = await image.readAsBytes();
       request.files.add(
-        await http.MultipartFile.fromPath('image', image.path),
+        http.MultipartFile.fromBytes(
+          'image',
+          bytes,
+          filename: image.name,
+        ),
       );
     }
 
